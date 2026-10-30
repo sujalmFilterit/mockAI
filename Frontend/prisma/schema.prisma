@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+model User {
+  user_id String @id @default(uuid())
+  name String
+  email String @unique
+  password_hash String?
+  profiles CandidateProfile[]
+  interviews Interview[]
+}
+model CandidateProfile {
+  profile_id String @id @default(uuid())
+  user_id String
+  user User @relation(fields: [user_id], references: [user_id])
+  extracted_text String
+  skills String[]
+  tools String[]
+  projects Json
+  interviews Interview[]
+}
+model Interview {
+  interview_id String @id @default(uuid())
+  user_id String
+  user User @relation(fields: [user_id], references: [user_id])
+  profile_id String
+  profile CandidateProfile @relation(fields: [profile_id], references: [profile_id])
+  role String
+  status String
+  current_difficulty String
+  created_at DateTime @default(now())
+  total Int
+  voice Boolean @default(false)
+  questions Question[]
+  report Report?
+}
+model Question {
+  question_id String @id @default(uuid())
+  interview_id String
+  interview Interview @relation(fields: [interview_id], references: [interview_id])
+  skill String
+  difficulty String
+  text String
+  order Int
+  answer Answer?
+  @@unique([interview_id, order])
+}
+model Answer {
+  answer_id String @id @default(uuid())
+  question_id String @unique
+  question Question @relation(fields: [question_id], references: [question_id])
+  text String
+  evaluation Evaluation?
+}
+model Evaluation {
+  evaluation_id String @id @default(uuid())
+  answer_id String @unique
+  answer Answer @relation(fields: [answer_id], references: [answer_id])
+  similarity_score Float
+  ml_label String
+  confidence Float
+  rubric Json
+  missing_concepts String[]
+  feedback String
+  final_score Float
+}
+model Report {
+  report_id String @id @default(uuid())
+  interview_id String @unique
+  interview Interview @relation(fields: [interview_id], references: [interview_id])
+  overall_score Float
+  strengths String[]
+  skill_gaps String[]
+  skill_scores Json
+}

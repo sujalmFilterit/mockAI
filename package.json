@@ -1,0 +1,1 @@
+{"name":"nova-workspace","private":true,"scripts":{"dev":"npm --prefix Frontend run dev","build":"npm --prefix Frontend run build","test":"npm --prefix Frontend test","lint":"npm --prefix Frontend run lint","typecheck":"npm --prefix Frontend run typecheck","postinstall":"npm --prefix Frontend install"}}
