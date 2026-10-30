@@ -18,6 +18,12 @@ No database, API key, or environment file is needed for development. Google font
 
 ## Configuration
 
+### Vercel deployment
+
+Set the Vercel project Root Directory to the folder containing this README and the Next.js package.json (`Frontend` if the whole workspace is pushed; `.` if only the app folder is pushed). Select **Next.js** as Framework Preset, use `npm run build`, and disable the Output Directory override (remove `public`). The included vercel.json pins the Next.js preset. Vercel builds use `.next`; local production builds retain `.next-production`.
+
+Set `AUTH_SECRET` in Vercel environment variables before running the deployed authentication endpoints. The JSON repository is a local-development adapter: Vercel serverless functions cannot use it as durable writable storage. Replace it with the PostgreSQL repository before expecting hosted sign-up or interview persistence to work.
+
 Copy `.env.example` to `.env.local` to override defaults:
 
 | Variable                   | Default                   | Purpose                                                                                                                    |
